@@ -1,0 +1,59 @@
+<nav class="navbar navbar-light fixed-top navbar-expand-lg font-weight-bold" style="background-color: #e3f2fd;">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'index' %}">LMS</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Students
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'students:list' %}">List of students</a></li>
+            <li><a class="dropdown-item" href="{% url 'students:create' %}">Create new student</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Groups
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'groups:list' %}">List of groups</a></li>
+            <li><a class="dropdown-item" href="{% url 'groups:create' %}">Create new group</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav d-flex">
+         <li class="nav-item dropdown">
+           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+             Account
+           </a>
+           <ul class="dropdown-menu" aria-labelledby="navbarDropdown3">
+           {% if user.is_authenticated %}
+               <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sign Out</a></li>
+               <li><hr class="dropdown-divider"></li>
+               <li><a class="dropdown-item" href="{% url 'accounts:profile_update' %}">Profile {{ user.username }}</a></li>
+               <li><a class="dropdown-item" href="{% url 'password_change' %}">Change password</a></li>
+           {% else %}
+             <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Sign In</a></li>
+             <li><hr class="dropdown-divider"></li>
+             <li><a class="dropdown-item" href="{% url 'accounts:registration' %}">Sign Up</a></li>
+           {% endif %}
+           </ul>
+         </li>
+       </ul>
+      <form class="d-flex">
+        <a class="btn btn-outline-success" data-bs-toggle="collapse" href="#collapseExample" role="button"
+           aria-expanded="false" aria-controls="collapseExample">
+            Search
+        </a>
+      </form>
+    </div>
+  </div>
+</nav>
