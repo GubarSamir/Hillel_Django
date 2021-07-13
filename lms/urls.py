@@ -17,7 +17,7 @@ import debug_toolbar
 from django.contrib import admin
 
 from core.views import index
-from students.views import hello, get_students, create_student, update_student
+from students.views import hello
 from django.urls import include, path
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('', index, name='index'),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('teachers/', include('teachers.urls')),
     path('students/', include('students.urls')),
     path('groups/', include('groups.urls')),
 ]

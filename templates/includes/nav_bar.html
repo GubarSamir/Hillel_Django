@@ -25,10 +25,22 @@
             <li><a class="dropdown-item" href="{% url 'groups:create' %}">Create new group</a></li>
           </ul>
         </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Teacher
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{% url 'teachers:list' %}">List of teachers</a></li>
+            <li><a class="dropdown-item" href="{% url 'teachers:create' %}">Create new teacher</a></li>
+          </ul>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
+
       <ul class="navbar-nav d-flex">
          <li class="nav-item dropdown">
            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">

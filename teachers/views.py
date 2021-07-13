@@ -1,3 +1,44 @@
-from django.shortcuts import render
+from django.urls import reverse, reverse_lazy
+from django.shortcuts import render, get_object_or_404  # noqa
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views.generic import UpdateView, DeleteView, ListView, CreateView
 
-# Create your views here.
+from core.views import EditView
+from teachers.forms import TeachersCreateForm, TeachersUpdateForm, TeachersFilter
+from teachers.models import Teacher
+
+
+from webargs.djangoparser import use_kwargs, use_args
+from webargs import fields
+
+
+class TeachersCreateView(CreateView):
+    model = Teacher
+    form_class = TeachersCreateForm
+    success_url = reverse_lazy('teachers:list')
+    template_name = 'teachers/create.html'
+
+
+class UpdateTeachersView(EditView):
+    model = Teacher
+    form_class = TeachersUpdateForm
+    success_url = 'teachers:list'
+    template_name = 'teachers/update.html'
+
+
+class TeachersUpdateView(UpdateView):
+    model = Teacher
+    form_class = TeachersUpdateForm
+    success_url = reverse_lazy('teachers:list')
+    template_name = 'teachers/update.html'
+
+
+class TeachersListView(ListView):
+    model = Teacher
+    template_name = 'teachers/list.html'
+
+
+class TeachersDeleteView(DeleteView):
+    model = Teacher
+    success_url = reverse_lazy('teachers:list')
+    template_name = 'teachers/delete.html'

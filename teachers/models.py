@@ -1,3 +1,4 @@
+
 from django.db import models
 
 from core.models import Person
@@ -13,7 +14,3 @@ class Teacher(Person):
         obj = super()._generate()
         obj.salary = randint(1000, 3000)
         obj.save()
-
-
-# Generating fake data (Teacher's objects)
-# Teacher.generate(10)

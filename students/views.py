@@ -1,7 +1,7 @@
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404  # noqa
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
@@ -17,35 +17,11 @@ def hello(request):
     return HttpResponse('Hello')
 
 
-@use_args(
-    {
-        "first_name": fields.Str(
-            required=False
-        ),
-        "last_name": fields.Str(
-            required=False
-        ),
-        "birthdate": fields.Date(required=False),
-    },
-    location="query",
-)
-def get_students(request, args):
-    students = Student.objects.all().select_related('group', 'headed_group')
-
-    # for param_name, param_value in args.items():
-    #     if param_value:
-    #         students = students.filter(**{param_name: param_value})
-
-    obj_filter = StudentsFilter(data=request.GET, queryset=students)
-
-    return render(
-        request=request,
-        template_name='students/list.html',
-        context={
-            'students': students,
-            'obj_filter': obj_filter,
-        }
-    )
+class StudentCreateView(CreateView):
+    model = Student
+    form_class = StudentCreateForm
+    success_url = reverse_lazy('students:list')
+    template_name = 'students/create.html'
 
 
 class StudentListView(LoginRequiredMixin, ListView):
@@ -61,62 +37,6 @@ class StudentListView(LoginRequiredMixin, ListView):
         return obj_list
 
 
-@login_required
-def create_student(request):
-    if request.method == 'GET':
-        form = StudentCreateForm()
-    elif request.method == 'POST':
-        form = StudentCreateForm(data=request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('students:list'))
-
-    return render(
-        request=request,
-        template_name='students/create.html',
-        context={
-            'form': form
-        }
-    )
-
-
-# @csrf_exempt
-def update_student(request, id):
-    student = Student.objects.get(id=id)
-
-    if request.method == 'POST':
-        form = StudentUpdateForm(instance=student, data=request.POST)
-
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('students:list'))
-    else:
-        form = StudentUpdateForm(instance=student)
-
-    return render(
-        request=request,
-        template_name='students/update.html',
-        context={
-            'form': form
-        }
-    )
-
-
-def delete_student(request, pk):
-    student = get_object_or_404(Student, id=pk)
-    if request.method == 'POST':
-        student.delete()
-        return HttpResponseRedirect(reverse('students:list'))
-
-    return render(
-        request=request,
-        template_name='students/delete.html',
-        context={
-            'student': student
-        }
-    )
-
-
 class UpdateStudentView(EditView):
     model = Student
     form_class = StudentUpdateForm
@@ -129,3 +49,9 @@ class StudentUpdateView(UpdateView):
     form_class = StudentUpdateForm
     success_url = reverse_lazy('students:list')
     template_name = 'students/update.html'
+
+
+class StudentDeleteView(DeleteView):
+    model = Student
+    success_url = reverse_lazy('students:list')
+    template_name = 'students/delete.html'
