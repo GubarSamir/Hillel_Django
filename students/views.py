@@ -1,9 +1,12 @@
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404  # noqa
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import ListView, UpdateView, DeleteView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
 
 from core.views import EditView
 from students.forms import StudentCreateForm, StudentUpdateForm, StudentsFilter
@@ -17,10 +20,11 @@ def hello(request):
     return HttpResponse('Hello')
 
 
-class StudentCreateView(CreateView):
+class StudentCreateView(SuccessMessageMixin, CreateView):
     model = Student
     form_class = StudentCreateForm
     success_url = reverse_lazy('students:list')
+    success_message = 'Student has create'
     template_name = 'students/create.html'
 
 

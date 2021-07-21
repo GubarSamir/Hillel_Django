@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
@@ -7,15 +9,16 @@ from .forms import GroupCreateForm, GroupUpdateForm
 from students.models import Student
 
 
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     template_name = 'groups/list.html'
 
 
-class GroupCreateView(CreateView):
+class GroupCreateView(SuccessMessageMixin, CreateView):
     model = Group
     form_class = GroupCreateForm
     success_url = reverse_lazy('groups:list')
+    success_message = 'Group create'
     template_name = 'groups/create.html'
 
 
