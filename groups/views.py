@@ -10,6 +10,7 @@ from students.models import Student
 
 
 class GroupListView(LoginRequiredMixin, ListView):
+    paginate_by = 5
     model = Group
     template_name = 'groups/list.html'
 

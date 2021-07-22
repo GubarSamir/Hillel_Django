@@ -14,6 +14,7 @@ from students.models import Student
 
 from webargs.djangoparser import use_kwargs, use_args
 from webargs import fields
+from copy import copy
 
 
 def hello(request):
@@ -29,16 +30,32 @@ class StudentCreateView(SuccessMessageMixin, CreateView):
 
 
 class StudentListView(LoginRequiredMixin, ListView):
+    paginate_by = 10
+
     model = Student
     template_name = 'students/list.html'
 
-    def get_queryset(self):
-        obj_list = StudentsFilter(
+    def get_filter(self):
+        return StudentsFilter(
             data=self.request.GET,
-            queryset=self.model.objects.all()
+            queryset=self.model.objects.all().select_related('group', 'headed_group')
         )
 
-        return obj_list
+    def get_queryset(self):
+        return self.get_filter().qs
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_filter'] = self.get_filter()
+
+        params = self.request.GET
+        if 'page' in params:
+            params = copy(params)
+            del params['page']
+
+        context['get_params'] = params.urlencode()
+
+        return context
 
 
 class UpdateStudentView(EditView):
