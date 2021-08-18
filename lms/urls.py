@@ -15,6 +15,8 @@ Including another URLconf
 """
 import debug_toolbar
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 from core.views import index
 from students.views import hello
@@ -32,6 +34,8 @@ urlpatterns = [
     path('groups/', include('groups.urls')),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
     path('__debug__/', include(debug_toolbar.urls)),
